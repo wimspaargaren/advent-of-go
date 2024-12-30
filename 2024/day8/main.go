@@ -75,18 +75,6 @@ func getAllCombinations(points []Point) []Combination {
 	return result
 }
 
-func isInMap(parsedMap [][]string, x, y int) bool {
-	return y >= 0 && y < len(parsedMap) && x >= 0 && x < len(parsedMap[y])
-}
-
-func printMap(m [][]string) {
-	var res string
-	for _, row := range m {
-		res += strings.Join(row, "") + "\n"
-	}
-	fmt.Println(res)
-}
-
 type Point struct {
 	X, Y int
 }
