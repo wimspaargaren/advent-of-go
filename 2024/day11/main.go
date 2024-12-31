@@ -22,8 +22,8 @@ func main() {
 		part2 += recurse(parsed[i], 75, resMap)
 	}
 
-	fmt.Println("part1", part1)
-	fmt.Println("part2", part2)
+	fmt.Println("part1:", part1)
+	fmt.Println("part2:", part2)
 }
 
 func recurse(parsed, n int, resMap map[string]int) int {
