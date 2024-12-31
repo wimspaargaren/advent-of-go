@@ -11,8 +11,8 @@ func RemoveElementWithCopy(slice []int, index int) []int {
 	return res
 }
 
-func CopySlice(slice []string) []string {
-	res := make([]string, len(slice))
+func CopySlice[T any](slice []T) []T {
+	res := make([]T, len(slice))
 	copy(res, slice)
 	return res
 }
