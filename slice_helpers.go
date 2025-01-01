@@ -16,3 +16,12 @@ func CopySlice[T any](slice []T) []T {
 	copy(res, slice)
 	return res
 }
+
+func Contains[T comparable](slice []T, val T) bool {
+	for _, v := range slice {
+		if v == val {
+			return true
+		}
+	}
+	return false
+}
