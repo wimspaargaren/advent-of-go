@@ -14,14 +14,13 @@ type Rotation struct {
 }
 
 func main() {
-
 	lines := strings.Split(aoc.MustReadFile("input.txt"), "\n")
-	_ = lines
 	rotations := []Rotation{}
 	for _, line := range lines {
 		rotations = append(rotations, parseInput(line))
 	}
 	start := 50
+	exactZero := 0
 	totalZero := 0
 	// start is between 0 and 99
 	for _, rot := range rotations {
@@ -44,9 +43,12 @@ func main() {
 				}
 			}
 		}
-
+		if start == 0 {
+			exactZero++
+		}
 	}
-	fmt.Println(totalZero)
+	fmt.Println("part 1: ", exactZero)
+	fmt.Println("part 2: ", totalZero)
 }
 
 func parseInput(line string) Rotation {
