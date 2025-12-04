@@ -27,6 +27,24 @@ func ParseGrid(input string) [][]string {
 	return grid
 }
 
+func AdjacentPositionsForGrid(grid [][]string, x, y int) []string {
+	adjacent := []string{}
+
+	for dy := -1; dy <= 1; dy++ {
+		for dx := -1; dx <= 1; dx++ {
+			if dx == 0 && dy == 0 {
+				continue
+			}
+			nx, ny := x+dx, y+dy
+			if ny >= 0 && ny < len(grid) && nx >= 0 && nx < len(grid[ny]) {
+				adjacent = append(adjacent, grid[ny][nx])
+			}
+		}
+	}
+
+	return adjacent
+}
+
 func IsNearEdge(grid [][]string, x, y int) bool {
 	if x == 0 || y == 0 {
 		return true
