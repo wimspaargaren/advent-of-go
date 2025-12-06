@@ -23,12 +23,9 @@ func main() {
 	calcs := getCalcs(lines, columnLengths)
 
 	part1 := 0
-	for _, calc := range calcs {
-		part1 += getTotal(calc.Values, calc.Operator)
-	}
-
 	part2 := 0
 	for _, calc := range calcs {
+		part1 += getTotal(calc.Values, calc.Operator)
 		newToCalc := make([]string, calc.ColumnLength)
 		for _, val := range calc.Values {
 			for i, c := range val {
@@ -74,19 +71,15 @@ func getCalcs(lines []string, columnLengths []int) []Calc {
 	}
 	for lineIndex, line := range lines {
 		line = line + " "
-		if lineIndex == len(lines)-1 {
-			start := 0
-			for i, cLen := range columnLengths {
-				end := start + cLen + 1
-				calcs[i].Operator = strings.Trim(line[start:end], " ")
-				start = end
-			}
-			break
-		}
+
 		start := 0
 		for i, cLen := range columnLengths {
 			end := start + cLen + 1
-			calcs[i].Values = append(calcs[i].Values, line[start:end])
+			if lineIndex == len(lines)-1 {
+				calcs[i].Operator = strings.Trim(line[start:end], " ")
+			} else {
+				calcs[i].Values = append(calcs[i].Values, line[start:end])
+			}
 			start = end
 		}
 	}
@@ -102,23 +95,14 @@ func getColumnLengths(lines []string) []int {
 
 		numbers := strings.Fields(line)
 		for i, number := range numbers {
-
 			if iLine == 0 {
 				columnLengths = append(columnLengths, len(number))
 				continue
-			} else {
-				if len(number) > columnLengths[i] {
-					columnLengths[i] = len(number)
-				}
+			} else if len(number) > columnLengths[i] {
+				columnLengths[i] = len(number)
 			}
 		}
 	}
-	total := 0
-	for _, clen := range columnLengths {
-		total += clen + 1
-	}
-	if total != len(lines[0])+1 {
-		panic("column length calculation is off")
-	}
+
 	return columnLengths
 }
