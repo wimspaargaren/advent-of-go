@@ -21,27 +21,28 @@ func walkGrid(grid [][]string, recursiveStore map[string]int, part1Visited map[s
 	part2 := 0
 	for y := yIn; y < len(grid)-1; y++ {
 		for x := 0; x < len(grid[y])-1; x++ {
-			if shouldBeam(grid[y-1][x]) {
-				switch grid[y][x] {
-				case ".":
-					grid[y][x] = "|"
-				case "^":
-					if !part1Visited[fmt.Sprintf("%d%d", y, x)] {
-						part1++
-						part1Visited[fmt.Sprintf("%d%d", y, x)] = true
-					}
-					if hasRight(x) {
-						part1Res, part2Res := recurse(grid, x-1, y, recursiveStore, part1Visited)
-						part1 += part1Res
-						part2 += part2Res
-					}
-					if hasLeft(x, len(grid[y])) {
-						part1Res, part2Res := recurse(grid, x+1, y, recursiveStore, part1Visited)
-						part1 += part1Res
-						part2 += part2Res
-					}
-					return part1, part2
+			if !shouldBeam(grid[y-1][x]) {
+				continue
+			}
+			switch grid[y][x] {
+			case ".":
+				grid[y][x] = "|"
+			case "^":
+				if !part1Visited[fmt.Sprintf("%d%d", y, x)] {
+					part1++
+					part1Visited[fmt.Sprintf("%d%d", y, x)] = true
 				}
+				if hasRight(x) {
+					part1Res, part2Res := recurse(grid, x-1, y, recursiveStore, part1Visited)
+					part1 += part1Res
+					part2 += part2Res
+				}
+				if hasLeft(x, len(grid[y])) {
+					part1Res, part2Res := recurse(grid, x+1, y, recursiveStore, part1Visited)
+					part1 += part1Res
+					part2 += part2Res
+				}
+				return part1, part2
 			}
 		}
 	}
