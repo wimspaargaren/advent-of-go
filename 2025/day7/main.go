@@ -32,12 +32,12 @@ func walkGrid(grid [][]string, recursiveStore map[string]int, part1Visited map[s
 					part1++
 					part1Visited[fmt.Sprintf("%d%d", y, x)] = true
 				}
-				if hasRight(x) {
+				if hasLeft(x) {
 					part1Res, part2Res := recurse(grid, x-1, y, recursiveStore, part1Visited)
 					part1 += part1Res
 					part2 += part2Res
 				}
-				if hasLeft(x, len(grid[y])) {
+				if hasRight(x, len(grid[y])) {
 					part1Res, part2Res := recurse(grid, x+1, y, recursiveStore, part1Visited)
 					part1 += part1Res
 					part2 += part2Res
@@ -70,11 +70,11 @@ func shouldBeam(tile string) bool {
 	return tile == "S" || tile == "|"
 }
 
-func hasRight(x int) bool {
+func hasLeft(x int) bool {
 	return x > 0
 }
 
-func hasLeft(x int, length int) bool {
+func hasRight(x int, length int) bool {
 	return x < length-1
 }
 
