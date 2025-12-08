@@ -61,11 +61,9 @@ func main() {
 			newGroup.AddPoint(pair.b)
 			groups = append(groups, newGroup)
 		} else if indexA != -1 && indexB == -1 {
-			groups[indexA].AddPoint(pair.a)
 			groups[indexA].AddPoint(pair.b)
 		} else if indexA == -1 && indexB != -1 {
 			groups[indexB].AddPoint(pair.a)
-			groups[indexB].AddPoint(pair.b)
 		} else if indexA != indexB {
 			for point := range groups[indexB].points {
 				groups[indexA].AddPoint(point)
