@@ -24,7 +24,6 @@ func (p Point) Distance(other Point) float64 {
 
 func main() {
 	input := aoc.MustReadFile("input.txt")
-	_ = input
 	lines := strings.Split(strings.TrimSpace(input), "\n")
 
 	points := getPoints(lines)
@@ -33,32 +32,26 @@ func main() {
 	groups := []Group{}
 	individualPoints := map[Point]bool{}
 
-	for i := 0; i < len(pairs); i++ {
+	part1 := 0
+	part2 := 0
+
+	for i := range pairs {
 		pair := pairs[i]
 		individualPoints[pair.a] = true
 		individualPoints[pair.b] = true
-		fmt.Println("Unique points so far:", len(individualPoints))
-
-		fmt.Println("Processing pair:", i, pair)
 		if len(points) == len(individualPoints) {
-			fmt.Println("ANSWER", pair.a.x*pair.b.x)
-			return
+			part2 = pair.a.x * pair.b.x
+			break
 		}
 		indexA := -1
 		indexB := -1
 		for i, group := range groups {
 			_, aExists := group.points[pair.a]
 			if aExists {
-				if indexA != -1 {
-					panic("WAT")
-				}
 				indexA = i
 			}
 			_, bExists := group.points[pair.b]
 			if bExists {
-				if indexB != -1 {
-					panic("WAT")
-				}
 				indexB = i
 			}
 		}
@@ -67,46 +60,40 @@ func main() {
 			newGroup.AddPoint(pair.a)
 			newGroup.AddPoint(pair.b)
 			groups = append(groups, newGroup)
-			continue
-		}
-		if indexA != -1 && indexB == -1 {
+		} else if indexA != -1 && indexB == -1 {
 			groups[indexA].AddPoint(pair.a)
 			groups[indexA].AddPoint(pair.b)
-			continue
-		}
-		if indexA == -1 && indexB != -1 {
+		} else if indexA == -1 && indexB != -1 {
 			groups[indexB].AddPoint(pair.a)
 			groups[indexB].AddPoint(pair.b)
-			continue
-		}
-		if indexA != indexB {
+		} else if indexA != indexB {
 			for point := range groups[indexB].points {
 				groups[indexA].AddPoint(point)
 			}
 			groups = append(groups[:indexB], groups[indexB+1:]...)
-			if len(groups) == 1 {
-				fmt.Println("HIT 1 with merge!!!", i, pairs[i])
-			}
+		}
+		if i == 999 {
+			part1 = getPart1(groups)
 		}
 	}
-	fmt.Println(len(groups))
-	for _, group := range groups {
-		fmt.Println(group.points)
-	}
+	fmt.Println("Part 1:", part1)
+	fmt.Println("Part 2:", part2)
+}
 
-	// slices.SortFunc(groups, func(a, b Group) int {
-	// 	if len(a.points) < len(b.points) {
-	// 		return 1
-	// 	} else if len(a.points) > len(b.points) {
-	// 		return -1
-	// 	}
-	// 	return 0
-	// })
-	// res := len(groups[0].points)
-	// for i := 1; i < 3; i++ {
-	// 	res *= len(groups[i].points)
-	// }
-	// fmt.Println("Result:", res)
+func getPart1(groups []Group) int {
+	slices.SortFunc(groups, func(a, b Group) int {
+		if len(a.points) < len(b.points) {
+			return 1
+		} else if len(a.points) > len(b.points) {
+			return -1
+		}
+		return 0
+	})
+	res := len(groups[0].points)
+	for i := 1; i < 3; i++ {
+		res *= len(groups[i].points)
+	}
+	return res
 }
 
 type Group struct {
@@ -125,8 +112,8 @@ type Pair struct {
 func getPairs(points []Point) []Pair {
 	pairs := []Pair{}
 	added := map[string]bool{}
-	for i := 0; i < len(points); i++ {
-		for j := 0; j < len(points); j++ {
+	for i := range points {
+		for j := range points {
 			if i == j {
 				continue
 			}
