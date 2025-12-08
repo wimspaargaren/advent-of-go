@@ -31,19 +31,9 @@ func main() {
 	pairs := getPairs(points)
 
 	groups := []Group{}
-	individualPoints := map[Point]bool{}
 
-	for i := 0; i < len(pairs); i++ {
+	for i := 0; i < 1000; i++ {
 		pair := pairs[i]
-		individualPoints[pair.a] = true
-		individualPoints[pair.b] = true
-		fmt.Println("Unique points so far:", len(individualPoints))
-
-		fmt.Println("Processing pair:", i, pair)
-		if len(points) == len(individualPoints) {
-			fmt.Println("ANSWER", pair.a.x*pair.b.x)
-			return
-		}
 		indexA := -1
 		indexB := -1
 		for i, group := range groups {
@@ -84,29 +74,22 @@ func main() {
 				groups[indexA].AddPoint(point)
 			}
 			groups = append(groups[:indexB], groups[indexB+1:]...)
-			if len(groups) == 1 {
-				fmt.Println("HIT 1 with merge!!!", i, pairs[i])
-			}
 		}
 	}
-	fmt.Println(len(groups))
-	for _, group := range groups {
-		fmt.Println(group.points)
-	}
 
-	// slices.SortFunc(groups, func(a, b Group) int {
-	// 	if len(a.points) < len(b.points) {
-	// 		return 1
-	// 	} else if len(a.points) > len(b.points) {
-	// 		return -1
-	// 	}
-	// 	return 0
-	// })
-	// res := len(groups[0].points)
-	// for i := 1; i < 3; i++ {
-	// 	res *= len(groups[i].points)
-	// }
-	// fmt.Println("Result:", res)
+	slices.SortFunc(groups, func(a, b Group) int {
+		if len(a.points) < len(b.points) {
+			return 1
+		} else if len(a.points) > len(b.points) {
+			return -1
+		}
+		return 0
+	})
+	res := len(groups[0].points)
+	for i := 1; i < 3; i++ {
+		res *= len(groups[i].points)
+	}
+	fmt.Println("Result:", res)
 }
 
 type Group struct {
