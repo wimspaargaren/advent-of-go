@@ -22,6 +22,7 @@ func main() {
 		part1 += process(machine)
 	}
 	fmt.Println("Part 1:", part1)
+
 }
 
 type Set struct {
@@ -149,6 +150,16 @@ func parseMachine(input string) Machine {
 	parts := strings.Split(input, " ")
 	config := parts[0]
 	jotlageRequirement := parts[len(parts)-1]
+	jotlageRequirement = jotlageRequirement[1 : len(jotlageRequirement)-1]
+	joltages := []int{}
+	for _, s := range strings.Split(jotlageRequirement, ",") {
+		joltage, err := strconv.Atoi(s)
+		if err != nil {
+			panic(err)
+		}
+		joltages = append(joltages, joltage)
+	}
+	fmt.Println("JOLTAGE", joltages)
 
 	buttons := [][]int{}
 	for i := 1; i < len(parts)-1; i++ {
@@ -168,7 +179,7 @@ func parseMachine(input string) Machine {
 
 	return Machine{
 		Config:              strings.Split(config, ""),
-		JoltageRequirements: jotlageRequirement,
+		JoltageRequirements: joltages,
 		Buttons:             buttons,
 	}
 }
@@ -176,5 +187,5 @@ func parseMachine(input string) Machine {
 type Machine struct {
 	Config              []string
 	Buttons             [][]int
-	JoltageRequirements string
+	JoltageRequirements []int
 }
