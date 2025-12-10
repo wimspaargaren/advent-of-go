@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -40,6 +41,7 @@ func (s *Set) Add(buttons [][]int, press int) {
 		s.counter[index]++
 	}
 	s.presses = append(s.presses, press)
+	slices.Sort(s.presses)
 }
 
 func (s *Set) Clone() *Set {
