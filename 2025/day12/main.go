@@ -11,32 +11,19 @@ import (
 func main() {
 	input := aoc.MustReadFile("input.txt")
 	_ = input
-	grids, presents := parseInput(input)
+	grids, _ := parseInput(input)
+	part1 := 0
 	for _, grid := range grids {
-		totalArea := 0
-		for i, presentID := range grid.Presents {
-			totalArea += presents[i].Area * presentID
+		check := 0
+		for _, presentID := range grid.Presents {
+			check += presentID
 		}
-		if totalArea <= grid.Width*grid.Height {
-			// more checks needed here
-			// each shape has 4 rotations (i think we also need to consider flips?)
-			// each shape's rotation can be placed at any position in the grid
-			// check if all shapes can fit without overlapping
-			// this is a complex problem, for now we will just print YES if area fits
-			fmt.Println("YES")
-			fmt.Println(grid.Width*grid.Height-totalArea, "space left")
-			// create a list of indexes we need to add
-			ids := []int{}
-			for i, presentID := range grid.Presents {
-				for j := 0; j < presentID; j++ {
-					ids = append(ids, i)
-				}
-			}
-			fmt.Println("Presents to place:", ids)
-		} else {
-			fmt.Println("NO")
+		if check*8 > grid.Width*grid.Height {
+			continue
 		}
+		part1++
 	}
+	fmt.Println("Part 1:", part1)
 }
 
 type Present struct {
@@ -63,7 +50,6 @@ func parseInput(input string) ([]Grid, []Present) {
 			splitted := strings.Split(line, " ")
 			dimension := splitted[0]
 			dimensions := strings.Split(dimension[0:len(dimension)-1], "x")
-			fmt.Println(dimensions)
 			width, err := strconv.Atoi(dimensions[0])
 			if err != nil {
 				panic(err)
@@ -139,16 +125,7 @@ func parseInput(input string) ([]Grid, []Present) {
 			}
 		}
 	}
-	for _, p := range presents {
-		fmt.Println(p)
-		for _, v := range p.Variants {
-			printGrid(v)
-			fmt.Println()
-		}
-	}
-	for _, g := range grids {
-		fmt.Println(g)
-	}
+
 	return grids, presents
 }
 
